@@ -1,15 +1,16 @@
 package vye.md;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Cc {
+	
+	private static Logger LOG = LoggerFactory.getLogger(Cc.class);
 
 	public static void main(String[] args) throws Exception {
-		SourceReader.readSource("md.txt");
-	
+		LOG.info("Starting post");
+		String chunk = SourceReader.readSource("md.txt");
+		Poster.post(chunk);
+		LOG.info("Completed post");
 	}
 }

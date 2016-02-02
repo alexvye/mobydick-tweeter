@@ -14,9 +14,9 @@ public class SourceReader {
 	
 	public static final int TWEET_SIZE = 140;
 	private static StringBuffer buffer;
-	public static int CHUNK_SIZE = 80;
+	public static int CHUNK_SIZE = 100;
 	
-	public static void readSource(String filename) throws Exception {
+	public static String readSource(String filename) throws Exception {
 
 		String text = readText(filename);
 		String newBuffer = removeWhiteSpace(text);
@@ -31,12 +31,26 @@ public class SourceReader {
 		} 
 		System.out.println("pos is " + pos);
 		String nc = getNextChunk(newBuffer.toString(),pos);
-		System.out.println(nc);
-		Integer newPos = new Integer(pos.intValue()+CHUNK_SIZE-1);
+		nc = endOnWord(nc,newBuffer.charAt(pos+nc.length()));
+		
+		Integer newPos = new Integer(pos.intValue()+nc.length());
 		if(newPos >= newBuffer.length()) {
 			newPos = 0;
 		}
 		writeState(positionFile,newPos);
+		
+		return nc;
+	}
+	
+	private static String endOnWord(String chunk, char nextChar) {
+		String result = null;
+		if(nextChar == ' ') {
+			result = chunk;
+		} else {
+			int index = chunk.lastIndexOf(' ');
+			result = chunk.substring(0, index);
+		}
+		return result;
 	}
 
 	
